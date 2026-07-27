@@ -34,7 +34,7 @@ class PluginOrientworkflowInstall
 
         // Database tables will be created here
         // Example:
-        // self::createTables();
+        self::createTables();
 
         return true;
     }
@@ -62,9 +62,41 @@ class PluginOrientworkflowInstall
      */
     private static function createTables(): void
     {
-        global $DB;
+        // global $DB;
 
-        // SQL tables will be added here in next phase.
+        // Branches Table
+        $query = "
+        CREATE TABLE IF NOT EXISTS `glpi_plugin_orientworkflow_branches` (
+            `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(100) NOT NULL,
+            `description` TEXT DEFAULT NULL,
+            `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+            `date_creation` DATETIME DEFAULT CURRENT_TIMESTAMP,
+            `date_mod` DATETIME DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `name` (`name`)
+        ) ENGINE=InnoDB
+        DEFAULT CHARSET=utf8mb4
+        COLLATE=utf8mb4_unicode_ci;
+        ";
+
+        $DB->doQuery($query);
+
+        // Services Table
+        // $query = "...";
+        // $DB->doQuery($query);
+
+        // Categories Table
+        // ...
+
+        // Routes Table
+        // ...
+
+        // Settings Table
+        // ...
+
+        // Logs Table
     }
 
     /**
