@@ -68,10 +68,10 @@ function plugin_orientworkflow_check_prerequisites()
 /**
  * Check configuration
  */
-function plugin_orientworkflow_check_config()
-{
-    return true;
-}
+// function plugin_orientworkflow_check_config()
+// {
+//     return true;
+// }
 
 function plugin_orientworkflow_install()
 {
