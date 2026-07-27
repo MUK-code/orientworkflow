@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * -------------------------------------------------------------------------
+ * Orient Workflow Plugin for GLPI
+ * -------------------------------------------------------------------------
+ *
+ * @copyright 2026
+ * @author Muhammad Usman Khalid
+ * @license GPL v2+
+ * -------------------------------------------------------------------------
+ */
+
 define('PLUGIN_ORIENTWORKFLOW_VERSION', '1.0.0');
 
 /**
@@ -9,7 +20,16 @@ function plugin_init_orientworkflow()
 {
     global $PLUGIN_HOOKS;
 
+    // CSRF Protection
     $PLUGIN_HOOKS['csrf_compliant']['orientworkflow'] = true;
+
+    // Plugin compatible with GLPI 11
+    Plugin::registerClass('PluginOrientworkflowConfig');
+
+    // Configuration page
+    if (Session::haveRight('config', UPDATE)) {
+        $PLUGIN_HOOKS['config_page']['orientworkflow'] = 'front/config.form.php';
+    }
 }
 
 /**
@@ -27,13 +47,16 @@ function plugin_version_orientworkflow()
             'glpi' => [
                 'min' => '11.0.0',
                 'max' => '11.99'
+            ],
+            'php' => [
+                'min' => '8.2'
             ]
         ]
     ];
 }
 
 /**
- * Plugin prerequisites
+ * Check prerequisites
  */
 function plugin_orientworkflow_check_prerequisites()
 {
@@ -41,7 +64,7 @@ function plugin_orientworkflow_check_prerequisites()
 }
 
 /**
- * Plugin configuration
+ * Check configuration
  */
 function plugin_orientworkflow_check_config()
 {

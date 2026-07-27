@@ -1,0 +1,15 @@
+{
+    "name": "orient/orientworkflow",
+    "description": "Orient Workflow Plugin for GLPI",
+    "type": "glpi-plugin",
+    "license": "GPL-2.0-or-later",
+    "version": "1.0.0",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "classmap": [
+            "inc/"
+        ]
+    }
+}
