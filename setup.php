@@ -55,6 +55,8 @@ function plugin_version_orientworkflow()
     ];
 }
 
+
+
 /**
  * Check prerequisites
  */
@@ -69,4 +71,18 @@ function plugin_orientworkflow_check_prerequisites()
 function plugin_orientworkflow_check_config()
 {
     return true;
+}
+
+function plugin_orientworkflow_install()
+{
+    require_once __DIR__ . '/inc/install.class.php';
+
+    return PluginOrientworkflowInstall::install();
+}
+
+function plugin_orientworkflow_uninstall()
+{
+    require_once __DIR__ . '/inc/install.class.php';
+
+    return PluginOrientworkflowInstall::uninstall();
 }
