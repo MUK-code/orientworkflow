@@ -131,6 +131,15 @@ public static function processTicket(int $ticketId): void
         // TODO: Step 3
     }
 
+    private static function log(string $message): void
+    {
+        file_put_contents(
+            GLPI_ROOT . "/files/_log/orientworkflow.log",
+            date('Y-m-d H:i:s') . " - " . $message . PHP_EOL,
+            FILE_APPEND
+        );
+    }
+
     /**
      * JSON ko parse karega.
      */
