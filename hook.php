@@ -15,22 +15,21 @@
  * -------------------------------------------------------------------------
  */
 
+<?php
+
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }
 
 require_once __DIR__ . '/inc/routing.class.php';
 
-/**
- * Fired after a Ticket is created.
- */
 function plugin_orientworkflow_ticket_add(CommonDBTM $item)
 {
     if (!$item instanceof Ticket) {
         return;
     }
 
-    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['orientworkflow'] = [
-    'Ticket' => 'plugin_orientworkflow_ticket_add'
-    ];
+    PluginOrientworkflowRouting::processTicket(
+        (int)$item->fields['id']
+    );
 }

@@ -1,5 +1,5 @@
 <?php
-use Glpi\Plugin\Hooks;
+
 /**
  * -------------------------------------------------------------------------
  * Orient Workflow Plugin for GLPI
@@ -23,18 +23,21 @@ function plugin_init_orientworkflow()
     // CSRF Protection
     $PLUGIN_HOOKS['csrf_compliant']['orientworkflow'] = true;
 
-    // Plugin compatible with GLPI 11
+    // Load plugin classes
     Plugin::registerClass('PluginOrientworkflowConfig');
 
-    // Ticket Create Hook
+    // Register ticket creation hook
     $PLUGIN_HOOKS['item_add']['orientworkflow'] = [
         'Ticket' => 'plugin_orientworkflow_ticket_add'
     ];
 
-    // Configuration page
+    // Plugin configuration page
     if (Session::haveRight('config', UPDATE)) {
         $PLUGIN_HOOKS['config_page']['orientworkflow'] = 'front/config.form.php';
     }
+
+    // Load hook functions
+    require_once __DIR__ . '/hook.php';
 }
 
 /**
@@ -43,12 +46,12 @@ function plugin_init_orientworkflow()
 function plugin_version_orientworkflow()
 {
     return [
-        'name'           => 'Orient Workflow',
-        'version'        => PLUGIN_ORIENTWORKFLOW_VERSION,
-        'author'         => 'Muhammad Usman Khalid',
-        'license'        => 'GPL v2+',
-        'homepage'       => '',
-        'requirements'   => [
+        'name'         => 'Orient Workflow',
+        'version'      => PLUGIN_ORIENTWORKFLOW_VERSION,
+        'author'       => 'Muhammad Usman Khalid',
+        'license'      => 'GPL v2+',
+        'homepage'     => '',
+        'requirements' => [
             'glpi' => [
                 'min' => '11.0.0',
                 'max' => '11.99'
@@ -59,8 +62,6 @@ function plugin_version_orientworkflow()
         ]
     ];
 }
-
-
 
 /**
  * Check prerequisites
@@ -73,19 +74,24 @@ function plugin_orientworkflow_check_prerequisites()
 /**
  * Check configuration
  */
-// function plugin_orientworkflow_check_config()
-// {
-//     return true;
-// }
+function plugin_orientworkflow_check_config()
+{
+    return true;
+}
 
+/**
+ * Install plugin
+ */
 function plugin_orientworkflow_install()
 {
     require_once __DIR__ . '/inc/install.class.php';
-    
 
     return PluginOrientworkflowInstall::install();
 }
 
+/**
+ * Uninstall plugin
+ */
 function plugin_orientworkflow_uninstall()
 {
     require_once __DIR__ . '/inc/install.class.php';
