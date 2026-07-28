@@ -84,8 +84,23 @@ class PluginOrientworkflowInstall
         $DB->doQuery($query);
 
         // Services Table
-        // $query = "...";
-        // $DB->doQuery($query);
+        $query = "
+        CREATE TABLE IF NOT EXISTS `glpi_plugin_orientworkflow_services` (
+            `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(100) NOT NULL,
+            `description` TEXT DEFAULT NULL,
+            `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+            `date_creation` DATETIME DEFAULT CURRENT_TIMESTAMP,
+            `date_mod` DATETIME DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `name` (`name`)
+        ) ENGINE=InnoDB
+        DEFAULT CHARSET=utf8mb4
+        COLLATE=utf8mb4_unicode_ci;
+        ";
+
+        $DB->doQuery($query);
 
         // Categories Table
         // ...
