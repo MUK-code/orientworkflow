@@ -123,8 +123,31 @@ class PluginOrientworkflowInstall
 
         $DB->doQuery($query);
 
-        // Routes Table
-        // ...
+       // Routes Table
+        $query = "
+        CREATE TABLE IF NOT EXISTS `glpi_plugin_orientworkflow_routes` (
+            `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            `branch` VARCHAR(100) NOT NULL,
+            `service` VARCHAR(100) NOT NULL,
+            `category` VARCHAR(100) NOT NULL,
+            `group_id` INT UNSIGNED NOT NULL,
+            `technician_id` INT UNSIGNED DEFAULT NULL,
+            `priority` TINYINT UNSIGNED DEFAULT NULL,
+            `sla_id` INT UNSIGNED DEFAULT NULL,
+            `entity_id` INT UNSIGNED DEFAULT 0,
+            `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+            `date_creation` DATETIME DEFAULT CURRENT_TIMESTAMP,
+            `date_mod` DATETIME DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            KEY `idx_route` (`branch`, `service`, `category`),
+            KEY `group_id` (`group_id`)
+        ) ENGINE=InnoDB
+        DEFAULT CHARSET=utf8mb4
+        COLLATE=utf8mb4_unicode_ci;
+        ";
+
+        $DB->doQuery($query); 
 
         // Settings Table
         // ...
