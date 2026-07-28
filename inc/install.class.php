@@ -62,7 +62,7 @@ class PluginOrientworkflowInstall
      */
     private static function createTables(): void
     {
-        // global $DB;
+        global $DB;
 
         // Branches Table
         $query = "
