@@ -67,17 +67,34 @@ class PluginOrientworkflowRouting
 
     // }
 
-    public static function processTicket(int $ticketId): void
-{
-    file_put_contents(
-        GLPI_ROOT . "/files/_log/orientworkflow.log",
-        date('Y-m-d H:i:s') . " - processTicket() called for Ticket ID: {$ticketId}\n",
-        FILE_APPEND
-    );
+//     public static function processTicket(int $ticketId): void
+// {
+//     file_put_contents(
+//         GLPI_ROOT . "/files/_log/orientworkflow.log",
+//         date('Y-m-d H:i:s') . " - processTicket() called for Ticket ID: {$ticketId}\n",
+//         FILE_APPEND
+//     );
 
-    echo "<h1 style='color:red'>Routing Engine Working</h1>";
-    echo "<br>Ticket ID : " . $ticketId;
-    die();
+//     echo "<h1 style='color:red'>Routing Engine Working</h1>";
+//     echo "<br>Ticket ID : " . $ticketId;
+//     die();
+// }
+
+public static function processTicket(int $ticketId): void
+{
+    self::log("processTicket() called for Ticket ID: $ticketId");
+
+    $answerSetId = self::getAnswerSetId($ticketId);
+
+    self::log("AnswerSet ID: " . var_export($answerSetId, true));
+
+    if (!$answerSetId) {
+        return;
+    }
+
+    $answers = self::getAnswers($answerSetId);
+
+    self::log(print_r($answers, true));
 }
 
     /**
@@ -87,7 +104,7 @@ class PluginOrientworkflowRouting
     {
         // TODO: Step 2
     global $DB;
-
+    self::log("Searching AnswerSet for Ticket ID: $ticketId");
     $iterator = $DB->request([
         'SELECT' => ['forms_answerssets_id'],
         'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
@@ -101,6 +118,7 @@ class PluginOrientworkflowRouting
     foreach ($iterator as $row) {
         return (int) $row['forms_answerssets_id'];
     }
+    self::log("No AnswerSet Found");
 
     return null;
     }
