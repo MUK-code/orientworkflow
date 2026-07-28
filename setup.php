@@ -26,6 +26,11 @@ function plugin_init_orientworkflow()
     // Plugin compatible with GLPI 11
     Plugin::registerClass('PluginOrientworkflowConfig');
 
+    // Ticket Create Hook
+    $PLUGIN_HOOKS['item_add']['orientworkflow'] = [
+        'Ticket' => 'plugin_orientworkflow_ticket_add'
+    ];
+
     // Configuration page
     if (Session::haveRight('config', UPDATE)) {
         $PLUGIN_HOOKS['config_page']['orientworkflow'] = 'front/config.form.php';
@@ -76,6 +81,7 @@ function plugin_orientworkflow_check_prerequisites()
 function plugin_orientworkflow_install()
 {
     require_once __DIR__ . '/inc/install.class.php';
+    
 
     return PluginOrientworkflowInstall::install();
 }

@@ -5,11 +5,10 @@
  * Orient Workflow Plugin for GLPI
  * -------------------------------------------------------------------------
  *
- * Hook file
+ * Hook File
  *
- * This file is reserved for future plugin hooks.
- * Ticket routing, assignment and automation hooks
- * will be registered here.
+ * This file receives GLPI events and forwards them
+ * to the Routing Engine.
  *
  * @author Muhammad Usman Khalid
  * @license GPL v2+
@@ -18,4 +17,20 @@
 
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
+}
+
+require_once __DIR__ . '/inc/routing.class.php';
+
+/**
+ * Fired after a Ticket is created.
+ */
+function plugin_orientworkflow_ticket_add(CommonDBTM $item)
+{
+    if (!$item instanceof Ticket) {
+        return;
+    }
+
+    PluginOrientworkflowRouting::processTicket(
+        (int)$item->fields['id']
+    );
 }

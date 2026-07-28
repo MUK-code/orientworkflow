@@ -55,12 +55,16 @@ class PluginOrientworkflowRouting
     // }
 
     // self::assignGroup($ticketId, $route);
-    $answerSetId = self::getAnswerSetId($ticketId);
+    // $answerSetId = self::getAnswerSetId($ticketId);
 
-    echo "<pre>";
-    var_dump($answerSetId);
-    echo "</pre>";
+    // echo "<pre>";
+    // var_dump($answerSetId);
+    // echo "</pre>";
+    // die();
+    echo "<h1 style='color:red'>Routing Engine Working</h1>";
+    echo "<br>Ticket ID : " . $ticketId;
     die();
+
     }
 
     /**
