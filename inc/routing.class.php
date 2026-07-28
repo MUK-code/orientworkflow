@@ -27,45 +27,58 @@ class PluginOrientworkflowRouting
      * Main Routing Engine
      * Ticket create hone ke baad ye method call hoga.
      */
-    public static function processTicket(int $ticketId): void
-    {
-        // TODO: Step 1
-    // $answerSetId = self::getAnswerSetId($ticketId);
+    // public static function processTicket(int $ticketId): void
+    // {
+    //     // TODO: Step 1
+    // // $answerSetId = self::getAnswerSetId($ticketId);
 
-    // if ($answerSetId === null) {
-    //     return;
-    // }
+    // // if ($answerSetId === null) {
+    // //     return;
+    // // }
 
-    // $answers = self::getAnswers($answerSetId);
+    // // $answers = self::getAnswers($answerSetId);
 
-    // if (empty($answers)) {
-    //     return;
-    // }
+    // // if (empty($answers)) {
+    // //     return;
+    // // }
 
-    // $ticketData = self::parseAnswers($answers);
+    // // $ticketData = self::parseAnswers($answers);
 
-    // if (empty($ticketData)) {
-    //     return;
-    // }
+    // // if (empty($ticketData)) {
+    // //     return;
+    // // }
 
-    // $route = self::findRoute($ticketData);
+    // // $route = self::findRoute($ticketData);
 
-    // if ($route === null) {
-    //     return;
-    // }
+    // // if ($route === null) {
+    // //     return;
+    // // }
 
-    // self::assignGroup($ticketId, $route);
-    // $answerSetId = self::getAnswerSetId($ticketId);
+    // // self::assignGroup($ticketId, $route);
+    // // $answerSetId = self::getAnswerSetId($ticketId);
 
-    // echo "<pre>";
-    // var_dump($answerSetId);
-    // echo "</pre>";
+    // // echo "<pre>";
+    // // var_dump($answerSetId);
+    // // echo "</pre>";
+    // // die();
+    // echo "<h1 style='color:red'>Routing Engine Working</h1>";
+    // echo "<br>Ticket ID : " . $ticketId;
     // die();
+
+    // }
+
+    public static function processTicket(int $ticketId): void
+{
+    file_put_contents(
+        GLPI_ROOT . "/files/_log/orientworkflow.log",
+        date('Y-m-d H:i:s') . " - processTicket() called for Ticket ID: {$ticketId}\n",
+        FILE_APPEND
+    );
+
     echo "<h1 style='color:red'>Routing Engine Working</h1>";
     echo "<br>Ticket ID : " . $ticketId;
     die();
-
-    }
+}
 
     /**
      * Forms Answer Set ID hasil karega.
