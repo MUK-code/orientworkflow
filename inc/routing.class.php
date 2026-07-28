@@ -17,7 +17,6 @@
  * @license GPL v2+
  * -------------------------------------------------------------------------
  */
-
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }
@@ -25,34 +24,48 @@ if (!defined('GLPI_ROOT')) {
 class PluginOrientworkflowRouting
 {
     /**
-     * Process a newly created ticket
+     * Main entry point
      */
     public static function processTicket(int $ticketId): void
     {
-        // Will be implemented in next step.
+        $answerSetId = self::getAnswerSetId($ticketId);
+        echo "<pre>";
+        var_dump($answerSetId);
+        echo "</pre>";
+        die();
+        // Next Sprint
+        // $answers = self::getFormAnswers($answerSetId);
     }
 
     /**
-     * Read GLPI Form answers
+     * Get GLPI Forms AnswerSet ID from Ticket ID
      */
-    private static function getFormAnswers(int $ticketId): array
+    private static function getAnswerSetId(int $ticketId): ?int
     {
-        return [];
-    }
+        global $DB;
 
-    /**
-     * Find matching routing rule
-     */
-    private static function findRoute(array $answers): ?array
-    {
+        $sql = "
+            SELECT forms_answerssets_id
+            FROM glpi_forms_destinations_answerssets_formdestinationitems
+            WHERE itemtype = 'Ticket'
+              AND items_id = ?
+            LIMIT 1
+        ";
+
+        $iterator = $DB->request([
+            'SELECT' => ['forms_answerssets_id'],
+            'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
+            'WHERE'  => [
+                'itemtype' => 'Ticket',
+                'items_id' => $ticketId
+            ],
+            'LIMIT'  => 1
+        ]);
+
+        foreach ($iterator as $row) {
+            return (int)$row['forms_answerssets_id'];
+        }
+
         return null;
-    }
-
-    /**
-     * Assign ticket
-     */
-    private static function assignTicket(int $ticketId, array $route): void
-    {
-        // Will be implemented later.
     }
 }
