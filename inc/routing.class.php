@@ -24,48 +24,113 @@ if (!defined('GLPI_ROOT')) {
 class PluginOrientworkflowRouting
 {
     /**
-     * Main entry point
+     * Main Routing Engine
+     * Ticket create hone ke baad ye method call hoga.
      */
     public static function processTicket(int $ticketId): void
     {
-        $answerSetId = self::getAnswerSetId($ticketId);
-        echo "<pre>";
-        var_dump($answerSetId);
-        echo "</pre>";
-        die();
-        // Next Sprint
-        // $answers = self::getFormAnswers($answerSetId);
+        // TODO: Step 1
+    // $answerSetId = self::getAnswerSetId($ticketId);
+
+    // if ($answerSetId === null) {
+    //     return;
+    // }
+
+    // $answers = self::getAnswers($answerSetId);
+
+    // if (empty($answers)) {
+    //     return;
+    // }
+
+    // $ticketData = self::parseAnswers($answers);
+
+    // if (empty($ticketData)) {
+    //     return;
+    // }
+
+    // $route = self::findRoute($ticketData);
+
+    // if ($route === null) {
+    //     return;
+    // }
+
+    // self::assignGroup($ticketId, $route);
+    $answerSetId = self::getAnswerSetId($ticketId);
+
+    echo "<pre>";
+    var_dump($answerSetId);
+    echo "</pre>";
+    die();
     }
 
     /**
-     * Get GLPI Forms AnswerSet ID from Ticket ID
+     * Forms Answer Set ID hasil karega.
      */
     private static function getAnswerSetId(int $ticketId): ?int
     {
-        global $DB;
+        // TODO: Step 2
+    global $DB;
 
-        $sql = "
-            SELECT forms_answerssets_id
-            FROM glpi_forms_destinations_answerssets_formdestinationitems
-            WHERE itemtype = 'Ticket'
-              AND items_id = ?
-            LIMIT 1
-        ";
+    $iterator = $DB->request([
+        'SELECT' => ['forms_answerssets_id'],
+        'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
+        'WHERE'  => [
+            'itemtype' => 'Ticket',
+            'items_id' => $ticketId
+        ],
+        'LIMIT' => 1
+    ]);
 
-        $iterator = $DB->request([
-            'SELECT' => ['forms_answerssets_id'],
-            'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
-            'WHERE'  => [
-                'itemtype' => 'Ticket',
-                'items_id' => $ticketId
-            ],
-            'LIMIT'  => 1
-        ]);
+    foreach ($iterator as $row) {
+        return (int) $row['forms_answerssets_id'];
+    }
 
-        foreach ($iterator as $row) {
-            return (int)$row['forms_answerssets_id'];
-        }
+    return null;
+    }
 
-        return null;
+    /**
+     * Forms ke answers JSON read karega.
+     */
+    private static function getAnswers(int $answerSetId): array
+    {
+        // TODO: Step 3
+    }
+
+    /**
+     * JSON ko parse karega.
+     */
+    private static function parseAnswers(array $answers): array
+    {
+        // TODO: Step 4
+    }
+
+    /**
+     * Dropdown Raw ID ko Label mein convert karega.
+     */
+    private static function resolveDropdownValue(
+        string $question,
+        string $rawAnswer
+    ): ?string
+    {
+        // TODO: Step 5
+    }
+
+    /**
+     * Routes table mein matching route find karega.
+     */
+    private static function findRoute(array $data): ?array
+    {
+        // TODO: Step 6
+    }
+
+    /**
+     * Ticket ko Group assign karega.
+     */
+    private static function assignGroup(
+        int $ticketId,
+        array $route
+    ): bool
+    {
+        // TODO: Step 7
     }
 }
