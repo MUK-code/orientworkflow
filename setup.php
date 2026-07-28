@@ -1,5 +1,5 @@
 <?php
-
+use Glpi\Plugin\Hooks;
 /**
  * -------------------------------------------------------------------------
  * Orient Workflow Plugin for GLPI

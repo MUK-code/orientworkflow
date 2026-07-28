@@ -30,7 +30,7 @@ function plugin_orientworkflow_ticket_add(CommonDBTM $item)
         return;
     }
 
-    PluginOrientworkflowRouting::processTicket(
-        (int)$item->fields['id']
-    );
+    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['orientworkflow'] = [
+    'Ticket' => 'plugin_orientworkflow_ticket_add'
+    ];
 }
