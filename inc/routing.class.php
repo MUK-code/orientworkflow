@@ -48,6 +48,20 @@ public static function process(
 }
 
     $ticketData = self::parseAnswers($answers);
+    $ticketData['branch'] = self::resolveDropdownValue(
+    'Branch',
+    $ticketData['branch']
+    );
+
+    $ticketData['service'] = self::resolveDropdownValue(
+        'Service',
+        $ticketData['service']
+    );
+
+    $ticketData['category'] = self::resolveDropdownValue(
+        'IT Category',
+        $ticketData['category']
+    );
 
     self::log("Parsed Data:");
 
@@ -123,12 +137,35 @@ public static function process(
      * Dropdown Raw ID ko Label mein convert karega.
      */
     private static function resolveDropdownValue(
-        string $question,
-        string $rawAnswer
-    ): ?string 
-    {
-        // TODO: Step 5
+    string $question,
+    string $rawAnswer
+): ?string {
+
+    global $DB;
+
+    $iterator = $DB->request([
+        'SELECT' => ['extra_data'],
+        'FROM'   => 'glpi_forms_questions',
+        'WHERE'  => [
+            'name' => $question
+        ],
+        'LIMIT'  => 1
+    ]);
+
+    foreach ($iterator as $row) {
+
+        $extra = json_decode($row['extra_data'], true);
+
+        if (
+            isset($extra['options']) &&
+            isset($extra['options'][$rawAnswer])
+        ) {
+            return $extra['options'][$rawAnswer];
+        }
     }
+
+    return $rawAnswer;
+}
 
     /**
      * Routes table mein matching route find karega.
