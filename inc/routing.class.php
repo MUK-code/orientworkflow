@@ -90,7 +90,7 @@ public static function process(
     self::log("Routing Success");
     self::log("Assign Group ID = " . $route['group_id']);
 
-    $route = self::findRoute($ticketData);
+    // $route = self::findRoute($ticketData);
 
     if ($route === null) {
         self::log("Routing Failed");
@@ -265,11 +265,17 @@ public static function process(
         'id' => $ticketId,
         'groups_id_assign' => (int)$route['group_id']
     ]);
+    self::log("Update Result = " . var_export($result, true));
+    self::log("groups_id_assign = " . $ticket->fields['groups_id_assign']);
 
     if ($result) {
         self::log("Group Assigned Successfully");
         self::log("Group ID = " . $route['group_id']);
         return true;
+    }
+    if (!$result) {
+    self::log("Update failed");
+    self::log(print_r($ticket->getErrors(), true));
     }
 
     self::log("Group Assignment Failed");
