@@ -23,143 +23,40 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginOrientworkflowRouting
 {
-    /**
-     * Main Routing Engine
-     * Ticket create hone ke baad ye method call hoga.
-     */
-    // public static function processTicket(int $ticketId): void
-    // {
-    //     // TODO: Step 1
-    // // $answerSetId = self::getAnswerSetId($ticketId);
-
-    // // if ($answerSetId === null) {
-    // //     return;
-    // // }
-
-    // // $answers = self::getAnswers($answerSetId);
-
-    // // if (empty($answers)) {
-    // //     return;
-    // // }
-
-    // // $ticketData = self::parseAnswers($answers);
-
-    // // if (empty($ticketData)) {
-    // //     return;
-    // // }
-
-    // // $route = self::findRoute($ticketData);
-
-    // // if ($route === null) {
-    // //     return;
-    // // }
-
-    // // self::assignGroup($ticketId, $route);
-    // // $answerSetId = self::getAnswerSetId($ticketId);
-
-    // // echo "<pre>";
-    // // var_dump($answerSetId);
-    // // echo "</pre>";
-    // // die();
-    // echo "<h1 style='color:red'>Routing Engine Working</h1>";
-    // echo "<br>Ticket ID : " . $ticketId;
-    // die();
-
-    // }
-
-//     public static function processTicket(int $ticketId): void
-// {
-//     file_put_contents(
-//         GLPI_ROOT . "/files/_log/orientworkflow.log",
-//         date('Y-m-d H:i:s') . " - processTicket() called for Ticket ID: {$ticketId}\n",
-//         FILE_APPEND
-//     );
-
-//     echo "<h1 style='color:red'>Routing Engine Working</h1>";
-//     echo "<br>Ticket ID : " . $ticketId;
-//     die();
-// }
-
-public static function processTicket(int $ticketId): void
-{
-    self::log("processTicket() called for Ticket ID: $ticketId");
-
-    $answerSetId = self::getAnswerSetId($ticketId);
-
-    self::log("AnswerSet ID: " . var_export($answerSetId, true));
-
-    if (!$answerSetId) {
-        return;
-    }
-
-    $answers = self::getAnswers($answerSetId);
-
-    self::log(print_r($answers, true));
-}
-
-    /**
-     * Forms Answer Set ID hasil karega.
-     */
-    // private static function getAnswerSetId(int $ticketId): ?int
-    // {
-    //     // TODO: Step 2
-    // global $DB;
-    // self::log("Searching AnswerSet for Ticket ID: $ticketId");
-    // $iterator = $DB->request([
-    //     'SELECT' => ['forms_answerssets_id'],
-    //     'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
-    //     'WHERE'  => [
-    //         'itemtype' => 'Ticket',
-    //         'items_id' => $ticketId
-    //     ],
-    //     'LIMIT' => 1
-    // ]);
-
-    // foreach ($iterator as $row) {
-    //     return (int) $row['forms_answerssets_id'];
-    // }
-    // self::log("No AnswerSet Found");
-
-    // return null;
-    // }
-
-    public static function process(
+    
+public static function process(
     \Glpi\Form\AnswersSet $answers_set,
     array $created_items
 ): void {
 
-    self::log("NEW PROCESS STARTED");
+    self::log("========== NEW REQUEST ==========");
+    self::log("AnswerSet ID : " . $answers_set->getID());
+    self::log("Created Items : " . count($created_items));
+    $answers = json_decode(
+        $answers_set->fields['answers'],
+        true
+    );
+    
 
-    self::log("AnswerSet ID: " . $answers_set->getID());
-
-    self::log("Created Items: " . count($created_items));
+    if (!is_array($answers)) {
+        self::log("Invalid JSON");
+        return;
+    }
+    if (empty($answers)) {
+    self::log("Answers JSON is empty");
+    return;
 }
 
-    private static function getAnswerSetId(int $ticketId): ?int
-    {
-        global $DB;
+    $ticketData = self::parseAnswers($answers);
 
-        self::log("Searching AnswerSet for Ticket ID: $ticketId");
+    self::log("Parsed Data:");
 
-        // $iterator = $DB->request([
-        //     'FROM' => 'glpi_forms_destinations_answerssets_formdestinationitems',
-        //     'ORDER' => ['id' => 'DESC'],
-        //     'LIMIT' => 10
-        // ]);
-
-        foreach ($iterator as $row) {
-            self::log(json_encode($row));
-        }
-
-        return null;
+    foreach ($ticketData as $key => $value) {
+        self::log($key . " = " . $value);
     }
-    /**
-     * Forms ke answers JSON read karega.
-     */
-    private static function getAnswers(int $answerSetId): array
-    {
-        // TODO: Step 3
-    }
+}
+
+    
 
     private static function log(string $message): void
     {
@@ -174,9 +71,53 @@ public static function processTicket(int $ticketId): void
      * JSON ko parse karega.
      */
     private static function parseAnswers(array $answers): array
-    {
-        // TODO: Step 4
+{
+    $result = [
+        'branch'      => '',
+        'service'     => '',
+        'category'    => '',
+        'title'       => '',
+        'description' => ''
+    ];
+
+    foreach ($answers as $answer) {
+
+        if (!isset($answer['question_label'])) {
+            continue;
+        }
+
+        $label = trim($answer['question_label']);
+
+        switch ($label) {
+
+            case 'Branch':
+                $result['branch'] = $answer['raw_answer'];
+                break;
+
+            case 'Service':
+                $result['service'] = $answer['raw_answer'];
+                break;
+
+            case 'IT Category':
+                $result['category'] = $answer['raw_answer'];
+                break;
+
+            case 'Title':
+                $result['title'] = strip_tags(
+                    $answer['raw_answer']
+                );
+                break;
+
+            case 'Description':
+                $result['description'] = strip_tags(
+                    $answer['raw_answer']
+                );
+                break;
+        }
     }
+
+    return $result;
+}
 
     /**
      * Dropdown Raw ID ko Label mein convert karega.
@@ -184,7 +125,7 @@ public static function processTicket(int $ticketId): void
     private static function resolveDropdownValue(
         string $question,
         string $rawAnswer
-    ): ?string
+    ): ?string 
     {
         // TODO: Step 5
     }
