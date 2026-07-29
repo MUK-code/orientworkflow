@@ -130,20 +130,14 @@ public static function processTicket(int $ticketId): void
         self::log("Searching AnswerSet for Ticket ID: $ticketId");
 
         $iterator = $DB->request([
-            'SELECT' => ['forms_answerssets_id'],
-            'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
-            'WHERE'  => [
-                'itemtype' => 'Ticket',
-                'items_id' => $ticketId
-            ],
-            'LIMIT' => 1
+            'FROM' => 'glpi_forms_destinations_answerssets_formdestinationitems',
+            'LIMIT' => 5
         ]);
 
         foreach ($iterator as $row) {
-            return (int) $row['forms_answerssets_id'];
+            self::log(json_encode($row));
         }
 
-        self::log("No AnswerSet Found");
         return null;
     }
 
