@@ -123,6 +123,18 @@ public static function processTicket(int $ticketId): void
     // return null;
     // }
 
+    public static function process(
+    \Glpi\Form\AnswersSet $answers_set,
+    array $created_items
+): void {
+
+    self::log("NEW PROCESS STARTED");
+
+    self::log("AnswerSet ID: " . $answers_set->getID());
+
+    self::log("Created Items: " . count($created_items));
+}
+
     private static function getAnswerSetId(int $ticketId): ?int
     {
         global $DB;
