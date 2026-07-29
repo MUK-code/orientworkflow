@@ -21,6 +21,7 @@ function plugin_orientworkflow_ticket_add(CommonDBTM $item)
 {
     file_put_contents(
         GLPI_ROOT . "/files/_log/orientworkflow.log",
+        "HOOK FIRED\n",
         "plugin_orientworkflow_ticket_add called\n",
         FILE_APPEND
     );
