@@ -20,15 +20,11 @@ require_once __DIR__ . '/inc/routing.class.php';
 
 function plugin_orientworkflow_ticket_add(CommonDBTM $item)
 {
-    file_put_contents(
-        GLPI_ROOT . "/files/_log/hook.log",
-        "HOOK FIRED\n",
-        FILE_APPEND
-    );
-
     if (!$item instanceof Ticket) {
         return;
     }
+
+    sleep(2);
 
     PluginOrientworkflowRouting::processTicket((int)$item->fields['id']);
 }
