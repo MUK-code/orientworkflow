@@ -24,7 +24,8 @@ function plugin_orientworkflow_ticket_add(CommonDBTM $item)
         return;
     }
 
-    sleep(2);
+    // sleep(2);
 
-    PluginOrientworkflowRouting::processTicket((int)$item->fields['id']);
+    // PluginOrientworkflowRouting::processTicket((int)$item->fields['id']);
+    // return;
 }
