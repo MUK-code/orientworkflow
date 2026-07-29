@@ -58,10 +58,25 @@ public static function process(
         $ticketData['service']
     );
 
+    // $ticketData['category'] = self::resolveDropdownValue(
+    //     'IT Category',
+    //     $ticketData['category']
+    // );
+    if ($ticketData['service'] === 'SAP Support') {
+
+    $ticketData['category'] = self::resolveDropdownValue(
+        'SAP Category',
+        $ticketData['category']
+    );
+
+    } else {
+
     $ticketData['category'] = self::resolveDropdownValue(
         'IT Category',
         $ticketData['category']
     );
+
+}
 
     self::log("Parsed Data:");
 
@@ -115,6 +130,10 @@ public static function process(
             case 'IT Category':
                 $result['category'] = $answer['raw_answer'];
                 break;
+
+            case 'SAP Category':
+            $result['category'] = $answer['raw_answer'];
+            break;
 
             case 'Title':
                 $result['title'] = strip_tags(
