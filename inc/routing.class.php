@@ -129,11 +129,11 @@ public static function processTicket(int $ticketId): void
 
         self::log("Searching AnswerSet for Ticket ID: $ticketId");
 
-        $iterator = $DB->request([
-            'FROM' => 'glpi_forms_destinations_answerssets_formdestinationitems',
-            'ORDER' => ['id' => 'DESC'],
-            'LIMIT' => 10
-        ]);
+        // $iterator = $DB->request([
+        //     'FROM' => 'glpi_forms_destinations_answerssets_formdestinationitems',
+        //     'ORDER' => ['id' => 'DESC'],
+        //     'LIMIT' => 10
+        // ]);
 
         foreach ($iterator as $row) {
             self::log(json_encode($row));
