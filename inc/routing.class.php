@@ -100,27 +100,58 @@ public static function processTicket(int $ticketId): void
     /**
      * Forms Answer Set ID hasil karega.
      */
+    // private static function getAnswerSetId(int $ticketId): ?int
+    // {
+    //     // TODO: Step 2
+    // global $DB;
+    // self::log("Searching AnswerSet for Ticket ID: $ticketId");
+    // $iterator = $DB->request([
+    //     'SELECT' => ['forms_answerssets_id'],
+    //     'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
+    //     'WHERE'  => [
+    //         'itemtype' => 'Ticket',
+    //         'items_id' => $ticketId
+    //     ],
+    //     'LIMIT' => 1
+    // ]);
+
+    // foreach ($iterator as $row) {
+    //     return (int) $row['forms_answerssets_id'];
+    // }
+    // self::log("No AnswerSet Found");
+
+    // return null;
+    // }
+
     private static function getAnswerSetId(int $ticketId): ?int
     {
-        // TODO: Step 2
-    global $DB;
-    self::log("Searching AnswerSet for Ticket ID: $ticketId");
-    $iterator = $DB->request([
-        'SELECT' => ['forms_answerssets_id'],
-        'FROM'   => 'glpi_forms_destinations_answerssets_formdestinationitems',
-        'WHERE'  => [
-            'itemtype' => 'Ticket',
-            'items_id' => $ticketId
-        ],
-        'LIMIT' => 1
-    ]);
+        global $DB;
 
-    foreach ($iterator as $row) {
-        return (int) $row['forms_answerssets_id'];
-    }
-    self::log("No AnswerSet Found");
+        self::log("Searching AnswerSet for Ticket ID: $ticketId");
 
-    return null;
+        $sql = "
+            SELECT forms_answerssets_id
+            FROM glpi_forms_destinations_answerssets_formdestinationitems
+            WHERE itemtype = 'Ticket'
+            AND items_id = $ticketId
+            LIMIT 1
+        ";
+
+        self::log($sql);
+
+        $result = $DB->query($sql);
+
+        if ($result && $DB->numrows($result) > 0) {
+            $row = $DB->fetchAssoc($result);
+
+            self::log("AnswerSet Found: " . $row['forms_answerssets_id']);
+
+            return (int)$row['forms_answerssets_id'];
+        }
+
+        self::log("No AnswerSet Found");
+
+        return null;
     }
 
     /**
