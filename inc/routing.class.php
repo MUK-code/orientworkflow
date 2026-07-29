@@ -80,6 +80,16 @@ public static function process(
 
     self::log("Parsed Data:");
 
+    $route = self::findRoute($ticketData);
+
+    if ($route === null) {
+        self::log("Routing Failed");
+        return;
+    }
+
+    self::log("Routing Success");
+    self::log("Assign Group ID = " . $route['group_id']);
+
     foreach ($ticketData as $key => $value) {
         self::log($key . " = " . $value);
     }
@@ -190,9 +200,37 @@ public static function process(
      * Routes table mein matching route find karega.
      */
     private static function findRoute(array $data): ?array
-    {
-        // TODO: Step 6
+{
+    global $DB;
+
+    self::log("Searching Route...");
+
+    $iterator = $DB->request([
+        'FROM' => 'glpi_plugin_orientworkflow_routes',
+        'WHERE' => [
+            'branch'    => $data['branch'],
+            'service'   => $data['service'],
+            'category'  => $data['category'],
+            'is_active' => 1
+        ],
+        'LIMIT' => 1
+    ]);
+
+    foreach ($iterator as $row) {
+
+        self::log("Route Found");
+
+        self::log(
+            "Route ID: {$row['id']} | Group ID: {$row['group_id']}"
+        );
+
+        return $row;
     }
+
+    self::log("No Route Found");
+
+    return null;
+}
 
     /**
      * Ticket ko Group assign karega.
