@@ -90,6 +90,20 @@ public static function process(
     self::log("Routing Success");
     self::log("Assign Group ID = " . $route['group_id']);
 
+    $route = self::findRoute($ticketData);
+
+    if ($route === null) {
+        self::log("Routing Failed");
+        return;
+    }
+
+    self::log("Routing Success");
+
+    self::assignGroup(
+    $created_items[0]->getID(),
+    $route
+    );
+
     foreach ($ticketData as $key => $value) {
         self::log($key . " = " . $value);
     }
@@ -236,10 +250,30 @@ public static function process(
      * Ticket ko Group assign karega.
      */
     private static function assignGroup(
-        int $ticketId,
-        array $route
-    ): bool
-    {
-        // TODO: Step 7
+    int $ticketId,
+    array $route
+    ): bool {
+
+    $ticket = new Ticket();
+
+    if (!$ticket->getFromDB($ticketId)) {
+        self::log("Ticket not found");
+        return false;
     }
+
+    $result = $ticket->update([
+        'id' => $ticketId,
+        'groups_id_assign' => (int)$route['group_id']
+    ]);
+
+    if ($result) {
+        self::log("Group Assigned Successfully");
+        self::log("Group ID = " . $route['group_id']);
+        return true;
+    }
+
+    self::log("Group Assignment Failed");
+
+    return false;
+}
 }
