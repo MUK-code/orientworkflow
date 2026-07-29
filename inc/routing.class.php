@@ -131,7 +131,8 @@ public static function processTicket(int $ticketId): void
 
         $iterator = $DB->request([
             'FROM' => 'glpi_forms_destinations_answerssets_formdestinationitems',
-            'LIMIT' => 5
+            'ORDER' => ['id' => 'DESC'],
+            'LIMIT' => 10
         ]);
 
         foreach ($iterator as $row) {
@@ -140,7 +141,6 @@ public static function processTicket(int $ticketId): void
 
         return null;
     }
-
     /**
      * Forms ke answers JSON read karega.
      */
