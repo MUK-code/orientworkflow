@@ -1,9 +1,7 @@
 <?php
 
 /**
- * -------------------------------------------------------------------------
  * Orient Workflow Plugin for GLPI
- * -------------------------------------------------------------------------
  *
  * Hook File
  *
@@ -12,17 +10,19 @@
  *
  * @author Muhammad Usman Khalid
  * @license GPL v2+
- * -------------------------------------------------------------------------
  */
 
-<?php
+if (!defined('GLPI_ROOT')) {
+    die("Sorry. You can't access this file directly");
+}
+
+require_once __DIR__ . '/inc/routing.class.php';
 
 function plugin_orientworkflow_ticket_add(CommonDBTM $item)
 {
     file_put_contents(
-        GLPI_ROOT . "/files/_log/orientworkflow.log",
+        GLPI_ROOT . "/files/_log/hook.log",
         "HOOK FIRED\n",
-        "plugin_orientworkflow_ticket_add called\n",
         FILE_APPEND
     );
 
