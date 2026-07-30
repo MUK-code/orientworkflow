@@ -86,11 +86,10 @@ echo "<tr>";
 echo "<td>Assign Technician</td>";
 echo "<td>";
 
-echo "<td>";
 
 global $DB;
 
-echo "<select name='technician_id' class='form-select'>";
+echo "<select id='technician_id' name='technician_id' class='form-select'>";
 
 echo "<option value=''>-----</option>";
 
