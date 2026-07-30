@@ -84,11 +84,12 @@ echo "</tr>";
 echo "<tr>";
 echo "<td>Assign Technician</td>";
 echo "<td>";
-User::dropdown(
-    [
-        'name' => 'technician_id'
-    ]
-);
+
+User::dropdown([
+    'name'      => 'technician_id',
+    'groups_id' => 1
+]);
+
 echo "</td>";
 echo "</tr>";
 
