@@ -126,8 +126,14 @@ public static function process(
             $ticket->getID(),
             $route
         );
+        self::assignTechnician(
+        $ticket->getID(),
+        $route
+        );
     }
-}
+    }
+
+    
 
     foreach ($ticketData as $key => $value) {
         self::log($key . " = " . $value);
@@ -297,6 +303,40 @@ public static function process(
     }
 
     self::log("Group Assignment Failed");
+    
+    //Assign Technician
+
+    private static function assignTechnician(
+    int $ticketId,
+    array $route
+    ): bool {
+
+    self::log("assignTechnician() ENTERED");
+
+    if (empty($route['technician_id'])) {
+        self::log("No Technician Configured");
+        return false;
+    }
+
+    $ticketUser = new Ticket_User();
+
+    $result = $ticketUser->add([
+        'tickets_id' => $ticketId,
+        'users_id'   => (int)$route['technician_id'],
+        'type'       => CommonITILActor::ASSIGN
+    ]);
+
+    self::log("Ticket_User Result = " . var_export($result, true));
+
+    if ($result) {
+        self::log("Technician Assigned Successfully");
+        return true;
+    }
+
+    self::log("Technician Assignment Failed");
+
+    return false;
+    }
 
     return false;
 }
