@@ -203,10 +203,30 @@ echo "</div>";
 <script>
 
 const group = document.querySelector("select[name='group_id']");
-console.log(group);
+const tech  = document.getElementById("technician_id");
 
-const tech = document.getElementById("technician_id");
-console.log(tech);
+group.addEventListener("change", function () {
+
+    fetch("../ajax/get_technicians.php?group_id=" + this.value)
+
+    .then(response => response.json())
+
+    .then(users => {
+
+        tech.innerHTML = "<option value=''>-----</option>";
+
+        users.forEach(function(user){
+
+            tech.innerHTML +=
+                `<option value="${user.id}">${user.name}</option>`;
+
+        });
+
+    })
+
+    .catch(error => console.log(error));
+
+});
 
 </script>
 <?php
