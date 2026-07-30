@@ -109,26 +109,25 @@ public static function process(
     self::log("created_items dump:");
     self::log(print_r($created_items, true));
 
-    self::log("Item Class = " . get_class($item));
+    foreach ($created_items as $type => $items) {
 
-    self::log("Ticket ID = " . $item->getID());
+    self::log("TYPE = " . $type);
 
-    $items = reset($created_items);
-
-    if (!is_array($items) || empty($items)) {
-        self::log("No Ticket Object Found");
-        return;
+    if (!is_array($items)) {
+        continue;
     }
 
-    $ticket = reset($items);
+    foreach ($items as $ticket) {
 
-    self::log("Ticket Class = " . get_class($ticket));
-    self::log("Ticket ID = " . $ticket->getID());
+        self::log("Ticket Class = " . get_class($ticket));
+        self::log("Ticket ID = " . $ticket->getID());
 
-    self::assignGroup(
-        $ticket->getID(),
-        $route
-    );
+        self::assignGroup(
+            $ticket->getID(),
+            $route
+        );
+    }
+}
 
     foreach ($ticketData as $key => $value) {
         self::log($key . " = " . $value);
