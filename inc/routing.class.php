@@ -106,6 +106,8 @@ public static function process(
     $item = reset($created_items);
 
     self::log("BEFORE assignGroup");
+    self::log("created_items dump:");
+    self::log(print_r($created_items, true));
 
     self::log("Item Class = " . get_class($item));
 
