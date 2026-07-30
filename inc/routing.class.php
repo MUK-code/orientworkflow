@@ -113,8 +113,20 @@ public static function process(
 
     self::log("Ticket ID = " . $item->getID());
 
+    $items = reset($created_items);
+
+    if (!is_array($items) || empty($items)) {
+        self::log("No Ticket Object Found");
+        return;
+    }
+
+    $ticket = reset($items);
+
+    self::log("Ticket Class = " . get_class($ticket));
+    self::log("Ticket ID = " . $ticket->getID());
+
     self::assignGroup(
-        $item->getID(),
+        $ticket->getID(),
         $route
     );
 
