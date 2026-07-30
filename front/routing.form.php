@@ -204,8 +204,10 @@ echo "</div>";
 <script>
 
 const group = document.querySelector("select[name='group_id']");
-
 console.log(group);
+
+const tech = document.getElementById("technician_id");
+console.log(tech);
 
 </script>
 <?php
