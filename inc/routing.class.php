@@ -92,16 +92,28 @@ public static function process(
 
     // $route = self::findRoute($ticketData);
 
-    if ($route === null) {
-        self::log("Routing Failed");
-        return;
-    }
+    // if ($route === null) {
+    //     self::log("Routing Failed");
+    //     return;
+    // }
 
     self::log("Routing Success");
+    
+    // self::assignGroup(
+    // $created_items[0]->getID(),
+    // $route
+    // );
+    $item = reset($created_items);
+
+    self::log("BEFORE assignGroup");
+
+    self::log("Item Class = " . get_class($item));
+
+    self::log("Ticket ID = " . $item->getID());
 
     self::assignGroup(
-    $created_items[0]->getID(),
-    $route
+        $item->getID(),
+        $route
     );
 
     foreach ($ticketData as $key => $value) {
@@ -253,7 +265,7 @@ public static function process(
     int $ticketId,
     array $route
     ): bool {
-
+    self::log("assignGroup() ENTERED");
     $ticket = new Ticket();
 
     if (!$ticket->getFromDB($ticketId)) {
