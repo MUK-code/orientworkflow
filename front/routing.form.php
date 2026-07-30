@@ -200,4 +200,14 @@ Html::closeForm();
 
 echo "</div>";
 
+?>
+<script>
+
+const group = document.querySelector("select[name='group_id']");
+
+console.log(group);
+
+</script>
+<?php
+
 Html::footer();
