@@ -28,6 +28,10 @@ href='routing.form.php'>
 Add Routing Rule
 </a>";
 
+echo "<a class='btn btn-primary' href='routing.form.php'>
+Add Routing Rule
+</a>";
+
 echo "</div>";
 
 Html::footer();
