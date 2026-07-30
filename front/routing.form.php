@@ -85,10 +85,48 @@ echo "<tr>";
 echo "<td>Assign Technician</td>";
 echo "<td>";
 
-User::dropdown([
-    'name'      => 'technician_id',
-    'groups_id' => 1
+echo "<td>";
+
+global $DB;
+
+echo "<select name='technician_id' class='form-select'>";
+
+echo "<option value=''>-----</option>";
+
+$iterator = $DB->request([
+    'SELECT' => [
+        'glpi_users.id',
+        'glpi_users.name',
+        'glpi_users.realname',
+        'glpi_users.firstname'
+    ],
+    'FROM' => 'glpi_users',
+    'INNER JOIN' => [
+        'glpi_groups_users' => [
+            'ON' => [
+                'glpi_users' => 'id',
+                'glpi_groups_users' => 'users_id'
+            ]
+        ]
+    ],
+    'WHERE' => [
+        'glpi_groups_users.groups_id' => 1
+    ],
+    'ORDER' => 'glpi_users.name'
 ]);
+
+foreach ($iterator as $user) {
+
+    $label = trim(
+        $user['firstname'] . " " . $user['realname']
+    );
+
+    echo "<option value='{$user['id']}'>$label</option>";
+}
+
+echo "</select>";
+
+echo "</td>";
 
 echo "</td>";
 echo "</tr>";
