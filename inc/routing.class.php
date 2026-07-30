@@ -278,30 +278,23 @@ public static function process(
     private static function assignGroup(
     int $ticketId,
     array $route
-    ): bool {
+): bool {
+
     self::log("assignGroup() ENTERED");
-    $ticket = new Ticket();
 
-    if (!$ticket->getFromDB($ticketId)) {
-        self::log("Ticket not found");
-        return false;
-    }
+    $groupTicket = new Group_Ticket();
 
-    $result = $ticket->update([
-        'id' => $ticketId,
-        'groups_id_assign' => (int)$route['group_id']
+    $result = $groupTicket->add([
+        'tickets_id' => $ticketId,
+        'groups_id'  => (int)$route['group_id'],
+        'type'       => CommonITILActor::ASSIGN
     ]);
-    self::log("Update Result = " . var_export($result, true));
-    self::log("groups_id_assign = " . $ticket->fields['groups_id_assign']);
+
+    self::log("Group_Ticket Result = " . var_export($result, true));
 
     if ($result) {
         self::log("Group Assigned Successfully");
-        self::log("Group ID = " . $route['group_id']);
         return true;
-    }
-    if (!$result) {
-    self::log("Update failed");
-    self::log(print_r($ticket->getErrors(), true));
     }
 
     self::log("Group Assignment Failed");
