@@ -73,7 +73,8 @@ echo "<td>";
 Dropdown::show(
     'Group',
     [
-        'name' => 'group_id'
+        'name' => 'group_id',
+        'id'   => 'group_id'
     ]
 );
 echo "</td>";
