@@ -13,11 +13,20 @@ Html::header(
 
 echo "<div class='center'>";
 
-echo "<h1>Orient Workflow</h1>";
+echo "<h1>Orient Workflow Configuration</h1>";
 
-echo "<p><strong>Version:</strong> 1.0.0</p>";
+echo "<hr>";
 
-echo "<p>Plugin Installed Successfully.</p>";
+echo "<h2>Routing Rules</h2>";
+
+echo "<p>Manage automatic ticket routing.</p>";
+
+echo "<br>";
+
+echo "<a class='btn btn-primary'
+href='routing.form.php'>
+Add Routing Rule
+</a>";
 
 echo "</div>";
 
