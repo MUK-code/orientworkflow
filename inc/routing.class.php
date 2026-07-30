@@ -304,7 +304,10 @@ public static function process(
 
     self::log("Group Assignment Failed");
     
-    //Assign Technician
+
+    return false;
+}
+//Assign Technician
 
     private static function assignTechnician(
     int $ticketId,
@@ -338,6 +341,4 @@ public static function process(
     return false;
     }
 
-    return false;
-}
 }
