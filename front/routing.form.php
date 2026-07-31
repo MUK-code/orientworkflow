@@ -223,7 +223,7 @@ echo Html::submit(
     [
         'name' => 'save'
     ]
-);1
+);
 
 echo "</td>";
 echo "</tr>";
