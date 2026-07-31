@@ -15,27 +15,21 @@ global $DB;
 
 if (isset($_POST['save'])) {
 
+    $data = [
+        'branch'            => $_POST['branch'],
+        'service'           => $_POST['service'],
+        'category'          => $_POST['category'],
+        'group_id'          => (int)$_POST['group_id'],
+        'technician_id'     => !empty($_POST['technician_id']) ? (int)$_POST['technician_id'] : null,
+        'itilcategories_id' => !empty($_POST['itilcategories_id']) ? (int)$_POST['itilcategories_id'] : null,
+        'priority'          => !empty($_POST['priority']) ? (int)$_POST['priority'] : null,
+        'sla_id'            => !empty($_POST['sla_id']) ? (int)$_POST['sla_id'] : null,
+        'is_active'         => (int)$_POST['is_active']
+    ];
+
     $DB->insert(
         'glpi_plugin_orientworkflow_routes',
-        [
-            'branch'            => $_POST['branch'],
-            'service'           => $_POST['service'],
-            'category'          => $_POST['category'],
-            'group_id'          => (int)$_POST['group_id'],
-            'technician_id'     => !empty($_POST['technician_id'])
-                                    ? (int)$_POST['technician_id']
-                                    : null,
-            'itilcategories_id' => !empty($_POST['itilcategories_id'])
-                                    ? (int)$_POST['itilcategories_id']
-                                    : null,
-            'priority'          => !empty($_POST['priority'])
-                                    ? (int)$_POST['priority']
-                                    : null,
-            'sla_id'            => !empty($_POST['sla_id'])
-                                    ? (int)$_POST['sla_id']
-                                    : null,
-            'is_active'         => (int)$_POST['is_active']
-        ]
+        $data
     );
 
     Session::addMessageAfterRedirect("Routing Rule Saved");
@@ -219,7 +213,7 @@ echo "<tr>";
 echo "<td colspan='2' class='center'>";
 
 echo Html::submit(
-    __('Save')
+    __('Save'),
     [
         'name' => 'save'
     ]
