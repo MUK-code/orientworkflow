@@ -292,6 +292,15 @@ public static function process(
         self::log("Route ID = ".$row['id']);
         self::log("Technician = ".var_export($row['technician_id'], true));
         self::log("Assignment = ".$row['assignment_mode']);
+        self::log("================================");
+        self::log("Route ID          = ".$row['id']);
+        self::log("Branch            = ".$row['branch']);
+        self::log("Service           = ".$row['service']);
+        self::log("Category          = ".$row['category']);
+        self::log("Group             = ".$row['group_id']);
+        self::log("Technician        = ".var_export($row['technician_id'], true));
+        self::log("Assignment Mode   = ".$row['assignment_mode']);
+        self::log("================================");
         return $row;
     }
 
