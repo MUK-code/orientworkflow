@@ -21,6 +21,7 @@ if (isset($_POST['save'])) {
         'category'          => $_POST['category'],
         'group_id'          => (int)$_POST['group_id'],
         'technician_id'     => !empty($_POST['technician_id']) ? (int)$_POST['technician_id'] : null,
+        'assignment_mode'   => $_POST['assignment_mode'],
         'itilcategories_id' => !empty($_POST['itilcategories_id']) ? (int)$_POST['itilcategories_id'] : null,
         'priority'          => !empty($_POST['priority']) ? (int)$_POST['priority'] : null,
         'sla_id'            => !empty($_POST['sla_id']) ? (int)$_POST['sla_id'] : null,
