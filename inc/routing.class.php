@@ -270,11 +270,18 @@ public static function process(
     ];
     }
 
-$iterator = $DB->request([
+    $iterator = $DB->request([
     'FROM'  => 'glpi_plugin_orientworkflow_routes',
     'WHERE' => $where,
+
+    'ORDER' => [
+        'technician_id DESC',
+        'id DESC'
+    ],
+
     'LIMIT' => 1
-]);
+    ]);
+
     foreach ($iterator as $row) {
 
         self::log("Route Found");
@@ -282,7 +289,9 @@ $iterator = $DB->request([
         self::log(
             "Route ID: {$row['id']} | Group ID: {$row['group_id']}"
         );
-
+        self::log("Route ID = ".$row['id']);
+        self::log("Technician = ".var_export($row['technician_id'], true));
+        self::log("Assignment = ".$row['assignment_mode']);
         return $row;
     }
 
