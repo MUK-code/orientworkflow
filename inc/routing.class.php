@@ -250,17 +250,31 @@ public static function process(
 
     self::log("Searching Route...");
 
-    $iterator = $DB->request([
-        'FROM' => 'glpi_plugin_orientworkflow_routes',
-        'WHERE' => [
-            'branch'    => $data['branch'],
-            'service'   => $data['service'],
-            'category'  => $data['category'],
-            'is_active' => 1
-        ],
-        'LIMIT' => 1
-    ]);
+    if ($data['service'] === 'SAP Support') {
 
+    // SAP: Branch ignore
+    $where = [
+        'service'   => $data['service'],
+        'category'  => $data['category'],
+        'is_active' => 1
+    ];
+
+    } else {
+
+    // IT: Branch required
+    $where = [
+        'branch'    => $data['branch'],
+        'service'   => $data['service'],
+        'category'  => $data['category'],
+        'is_active' => 1
+    ];
+    }
+
+$iterator = $DB->request([
+    'FROM'  => 'glpi_plugin_orientworkflow_routes',
+    'WHERE' => $where,
+    'LIMIT' => 1
+]);
     foreach ($iterator as $row) {
 
         self::log("Route Found");
