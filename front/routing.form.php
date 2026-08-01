@@ -231,35 +231,50 @@ echo "</div>";
 ?>
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+$(function () {
 
-    const group = document.querySelector("select[name='group_id']");
-    const tech  = document.getElementById("technician_id");
+    $("select[name='group_id']").on("change", function () {
 
-    console.log(group);
+        let group = $(this).val();
 
-    group.addEventListener("change", function () {
+        console.log("GROUP =", group);
 
-        console.log("Selected Group:", this.value);
+        $.getJSON(
+            "../ajax/get_technicians.php",
+            { group_id: group },
+            function (users) {
 
-        fetch("../ajax/get_technicians.php?group_id=" + this.value)
-        .then(r => r.json())
-        .then(data => {
+                console.log(users);
 
-            console.log(data);
+                let tech = $("#technician_id");
 
-            tech.innerHTML = "<option value=''>-----</option>";
+                tech.empty();
 
-            data.forEach(function(user){
-                tech.innerHTML +=
-                    `<option value="${user.id}">${user.name}</option>`;
-            });
+                tech.append(
+                    $("<option>", {
+                        value: "",
+                        text: "-----"
+                    })
+                );
 
-        });
+                $.each(users, function (_, user) {
+
+                    tech.append(
+                        $("<option>", {
+                            value: user.id,
+                            text: user.name
+                        })
+                    );
+
+                });
+
+            }
+        );
 
     });
 
 });
+
 </script>
 <?php
 
