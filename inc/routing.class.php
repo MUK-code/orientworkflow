@@ -284,25 +284,18 @@ public static function process(
 
     foreach ($iterator as $row) {
 
-        self::log("Route Found");
+    self::log("=========== ROUTE FOUND ===========");
 
-        self::log(
-            "Route ID: {$row['id']} | Group ID: {$row['group_id']}"
-        );
-        self::log("Route ID = ".$row['id']);
-        self::log("Technician = ".var_export($row['technician_id'], true));
-        self::log("Assignment = ".$row['assignment_mode']);
-        self::log("================================");
-        self::log("Route ID          = ".$row['id']);
-        self::log("Branch            = ".$row['branch']);
-        self::log("Service           = ".$row['service']);
-        self::log("Category          = ".$row['category']);
-        self::log("Group             = ".$row['group_id']);
-        self::log("Technician        = ".var_export($row['technician_id'], true));
-        self::log("Assignment Mode   = ".$row['assignment_mode']);
-        self::log("================================");
-        return $row;
+    foreach ($row as $key => $value) {
+
+        self::log($key . " => " . var_export($value, true));
+
     }
+
+    self::log("===================================");
+
+    return $row;
+}
 
     self::log("No Route Found");
 
