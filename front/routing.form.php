@@ -157,6 +157,26 @@ echo "</td>";
 echo "</td>";
 echo "</tr>";
 
+/* Assignment Mode */
+
+echo "<tr>";
+echo "<td>Assignment Mode</td>";
+echo "<td>";
+
+Dropdown::showFromArray(
+    'assignment_mode',
+    [
+        'FIXED'        => 'Fixed Technician',
+        'ROUND_ROBIN' => 'Round Robin'
+    ],
+    [
+        'value' => 'FIXED'
+    ]
+);
+
+echo "</td>";
+echo "</tr>";
+
 /* ITIL Category */
 
 echo "<tr>";
