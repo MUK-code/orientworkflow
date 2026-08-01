@@ -231,33 +231,35 @@ echo "</div>";
 ?>
 <script>
 
-const group = document.querySelector("select[name='group_id']");
-const tech  = document.getElementById("technician_id");
+document.addEventListener("DOMContentLoaded", function () {
 
-group.addEventListener("change", function () {
+    const group = document.querySelector("select[name='group_id']");
+    const tech  = document.getElementById("technician_id");
 
-    fetch("../ajax/get_technicians.php?group_id=" + this.value)
+    console.log(group);
 
-    .then(response => response.json())
+    group.addEventListener("change", function () {
 
-    .then(users => {
+        console.log("Selected Group:", this.value);
 
-        tech.innerHTML = "<option value=''>-----</option>";
+        fetch("../ajax/get_technicians.php?group_id=" + this.value)
+        .then(r => r.json())
+        .then(data => {
 
-        users.forEach(function(user){
+            console.log(data);
 
-            tech.innerHTML +=
-                `<option value="${user.id}">${user.name}</option>`;
+            tech.innerHTML = "<option value=''>-----</option>";
+
+            data.forEach(function(user){
+                tech.innerHTML +=
+                    `<option value="${user.id}">${user.name}</option>`;
+            });
 
         });
 
-    })
-
-    .catch(error => console.log(error));
+    });
 
 });
-
-</script>
 <?php
 
 Html::footer();
