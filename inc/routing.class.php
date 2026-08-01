@@ -312,33 +312,57 @@ public static function process(
     private static function assignTechnician(
     int $ticketId,
     array $route
-    ): bool {
+): bool {
 
     self::log("assignTechnician() ENTERED");
 
-    if (empty($route['technician_id'])) {
-        self::log("No Technician Configured");
+    if ($route['assignment_mode'] === 'ROUND_ROBIN') {
+
+        return self::assignRoundRobin(
+            $ticketId,
+            (int)$route['group_id']
+        );
+
+    }
+
+    return self::assignFixedTechnician(
+        $ticketId,
+        (int)$route['technician_id']
+    );
+}
+
+private static function assignFixedTechnician(
+    int $ticketId,
+    int $technicianId
+    ): bool {
+
+        if ($technicianId <= 0) {
+
+            self::log("No Technician Configured");
+
+            return false;
+        }
+
+        $ticketUser = new Ticket_User();
+
+        $result = $ticketUser->add([
+
+            'tickets_id' => $ticketId,
+            'users_id'   => $technicianId,
+            'type'       => CommonITILActor::ASSIGN
+
+        ]);
+
+        if ($result) {
+
+            self::log("Fixed Technician Assigned");
+
+            return true;
+        }
+
+        self::log("Fixed Assignment Failed");
+
         return false;
-    }
-
-    $ticketUser = new Ticket_User();
-
-    $result = $ticketUser->add([
-        'tickets_id' => $ticketId,
-        'users_id'   => (int)$route['technician_id'],
-        'type'       => CommonITILActor::ASSIGN
-    ]);
-
-    self::log("Ticket_User Result = " . var_export($result, true));
-
-    if ($result) {
-        self::log("Technician Assigned Successfully");
-        return true;
-    }
-
-    self::log("Technician Assignment Failed");
-
-    return false;
     }
 
 }
