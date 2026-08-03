@@ -2,6 +2,8 @@
 
 include('../../../inc/includes.php');
 
+require_once __DIR__ . '/../inc/RouteRepository.php';
+
 Session::checkRight('config', UPDATE);
 
 Html::header(
@@ -16,24 +18,30 @@ global $DB;
 if (isset($_POST['save'])) {
 
     $data = [
-        'branch'            => $_POST['branch'],
-        'service'           => $_POST['service'],
-        'category'          => $_POST['category'],
-        'group_id'          => (int)$_POST['group_id'],
+        'branch'            => trim((string)($_POST['branch'] ?? '')),
+        'service'           => trim((string)($_POST['service'] ?? '')),
+        'category'          => trim((string)($_POST['category'] ?? '')),
+        'group_id'          => (int)($_POST['group_id'] ?? 0),
         'technician_id'     => !empty($_POST['technician_id']) ? (int)$_POST['technician_id'] : null,
-        'assignment_mode'   => $_POST['assignment_mode'],
+        'assignment_mode'   => (string)($_POST['assignment_mode'] ?? 'FIXED'),
         'itilcategories_id' => !empty($_POST['itilcategories_id']) ? (int)$_POST['itilcategories_id'] : null,
         'priority'          => !empty($_POST['priority']) ? (int)$_POST['priority'] : null,
         'sla_id'            => !empty($_POST['sla_id']) ? (int)$_POST['sla_id'] : null,
-        'is_active'         => (int)$_POST['is_active']
+        'is_active'         => (int)($_POST['is_active'] ?? 0)
     ];
 
-    $DB->insert(
-        'glpi_plugin_orientworkflow_routes',
-        $data
-    );
+    try {
+        $repository = new PluginOrientworkflowRouteRepository();
+        $repository->save($data);
 
-    Session::addMessageAfterRedirect("Routing Rule Saved");
+        Session::addMessageAfterRedirect(__('Routing rule saved.', 'orientworkflow'));
+    } catch (Throwable $exception) {
+        Session::addMessageAfterRedirect(
+            __('Unable to save the routing rule. Check all required fields.', 'orientworkflow'),
+            false,
+            ERROR
+        );
+    }
 
     Html::redirect($_SERVER['PHP_SELF']);
 }
@@ -87,6 +95,9 @@ Dropdown::showFromArray(
     'category',
     [
         '' => '-----'
+    ],
+    [
+        'id' => 'category'
     ]
 );
 echo "</td>";
@@ -253,6 +264,45 @@ echo "</div>";
 <script>
 
 $(function () {
+
+    const category = $("select[name='category']");
+
+    function resetCategories() {
+        category.empty().append(
+            $("<option>", {
+                value: "",
+                text: "-----"
+            })
+        );
+    }
+
+    $("select[name='service']").on("change", function () {
+
+        const service = $(this).val();
+
+        resetCategories();
+
+        if (!service) {
+            return;
+        }
+
+        $.getJSON(
+            "../ajax/get_categories.php",
+            { service: service }
+        ).done(function (categories) {
+
+            $.each(categories, function (_, categoryOption) {
+                category.append(
+                    $("<option>", {
+                        value: categoryOption.id,
+                        text: categoryOption.name
+                    })
+                );
+            });
+        }).fail(function () {
+            resetCategories();
+        });
+    });
 
     $("select[name='group_id']").on("change", function () {
 
