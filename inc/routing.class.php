@@ -21,6 +21,11 @@ if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }
 
+public static function version()
+{
+    self::log("===== ROUTING CLASS VERSION 2 =====");
+}
+
 class PluginOrientworkflowRouting
 {
     
@@ -28,7 +33,7 @@ public static function process(
     \Glpi\Form\AnswersSet $answers_set,
     array $created_items
 ): void {
-
+    self::version();
     self::log("========== NEW REQUEST ==========");
     self::log("AnswerSet ID : " . $answers_set->getID());
     self::log("Created Items : " . count($created_items));
