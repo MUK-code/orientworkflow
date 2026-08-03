@@ -21,14 +21,16 @@ if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }
 
-public static function version()
-{
-    self::log("===== ROUTING CLASS VERSION 2 =====");
-}
-
 class PluginOrientworkflowRouting
 {
-    
+    /**
+     * Records the active routing implementation version.
+     */
+    public static function version(): void
+    {
+        self::log("===== ROUTING CLASS VERSION 2 =====");
+    }
+
 public static function process(
     \Glpi\Form\AnswersSet $answers_set,
     array $created_items
