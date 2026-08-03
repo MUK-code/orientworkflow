@@ -25,6 +25,10 @@ class PluginOrientworkflowRoundRobinService
      */
     public function getNextTechnician(int $groupId): ?int
     {
+        Toolbox::logInFile(
+        'orientworkflow',
+        "GET NEXT TECHNICIAN CALLED\n"
+        );
         try {
             if ($groupId <= 0) {
                 $this->log('round_robin.selection.failed', [
@@ -75,6 +79,10 @@ class PluginOrientworkflowRoundRobinService
      */
     public function recordAssignment(int $groupId, int $technicianId): bool
     {
+        Toolbox::logInFile(
+        'orientworkflow',
+        "RECORD ASSIGNMENT CALLED\n"
+        );
         try {
             if ($groupId <= 0 || $technicianId <= 0) {
                 return false;
