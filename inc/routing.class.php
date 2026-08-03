@@ -129,13 +129,11 @@ public static function process(
         self::log("Ticket Class = " . get_class($ticket));
         self::log("Ticket ID = " . $ticket->getID());
 
-        self::assignGroup(
-            $ticket->getID(),
-            $route
-        );
-        self::assignTechnician(
+        $assignment = new PluginOrientworkflowAssignmentService();
+
+        $assignment->assign(
         $ticket->getID(),
-        $route
+        $route  
         );
     }
     }
@@ -312,89 +310,89 @@ public static function process(
     /**
      * Ticket ko Group assign karega.
      */
-    private static function assignGroup(
-    int $ticketId,
-    array $route
-): bool {
+//     private static function assignGroup(
+//     int $ticketId,
+//     array $route
+// ): bool {
 
-    self::log("assignGroup() ENTERED");
+//     self::log("assignGroup() ENTERED");
 
-    $groupTicket = new Group_Ticket();
+//     $groupTicket = new Group_Ticket();
 
-    $result = $groupTicket->add([
-        'tickets_id' => $ticketId,
-        'groups_id'  => (int)$route['group_id'],
-        'type'       => CommonITILActor::ASSIGN
-    ]);
+//     $result = $groupTicket->add([
+//         'tickets_id' => $ticketId,
+//         'groups_id'  => (int)$route['group_id'],
+//         'type'       => CommonITILActor::ASSIGN
+//     ]);
 
-    self::log("Group_Ticket Result = " . var_export($result, true));
+//     self::log("Group_Ticket Result = " . var_export($result, true));
 
-    if ($result) {
-        self::log("Group Assigned Successfully");
-        return true;
-    }
+//     if ($result) {
+//         self::log("Group Assigned Successfully");
+//         return true;
+//     }
 
-    self::log("Group Assignment Failed");
+//     self::log("Group Assignment Failed");
     
 
-    return false;
-}
+//     return false;
+// }
 //Assign Technician
 
-    private static function assignTechnician(
-    int $ticketId,
-    array $route
-): bool {
+//     private static function assignTechnician(
+//     int $ticketId,
+//     array $route
+// ): bool {
 
-    self::log("assignTechnician() ENTERED");
+//     self::log("assignTechnician() ENTERED");
 
-    if ($route['assignment_mode'] === 'ROUND_ROBIN') {
+//     if ($route['assignment_mode'] === 'ROUND_ROBIN') {
 
-        return self::assignRoundRobin(
-            $ticketId,
-            (int)$route['group_id']
-        );
+//         return self::assignRoundRobin(
+//             $ticketId,
+//             (int)$route['group_id']
+//         );
 
-    }
+//     }
 
-    return self::assignFixedTechnician(
-        $ticketId,
-        (int)$route['technician_id']
-    );
-}
+//     return self::assignFixedTechnician(
+//         $ticketId,
+//         (int)$route['technician_id']
+//     );
+// }
 
-private static function assignFixedTechnician(
-    int $ticketId,
-    int $technicianId
-    ): bool {
+// private static function assignFixedTechnician(
+//     int $ticketId,
+//     int $technicianId
+//     ): bool {
 
-        if ($technicianId <= 0) {
+//         if ($technicianId <= 0) {
 
-            self::log("No Technician Configured");
+//             self::log("No Technician Configured");
 
-            return false;
-        }
+//             return false;
+//         }
 
-        $ticketUser = new Ticket_User();
+//         $ticketUser = new Ticket_User();
 
-        $result = $ticketUser->add([
+//         $result = $ticketUser->add([
 
-            'tickets_id' => $ticketId,
-            'users_id'   => $technicianId,
-            'type'       => CommonITILActor::ASSIGN
+//             'tickets_id' => $ticketId,
+//             'users_id'   => $technicianId,
+//             'type'       => CommonITILActor::ASSIGN
 
-        ]);
+//         ]);
 
-        if ($result) {
+//         if ($result) {
 
-            self::log("Fixed Technician Assigned");
+//             self::log("Fixed Technician Assigned");
 
-            return true;
-        }
+//             return true;
+//         }
 
-        self::log("Fixed Assignment Failed");
+//         self::log("Fixed Assignment Failed");
 
-        return false;
-    }
+//         return false;
+//     }
 
 }
